@@ -1,4 +1,4 @@
-resource app_signature "application/x-vnd.haikuplot";
+resource app_signature "application/x-vnd.gnuplotviewer";
 
 resource app_flags B_SINGLE_LAUNCH;
 

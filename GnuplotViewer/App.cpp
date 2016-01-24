@@ -7,7 +7,7 @@
 #include <OS.h>
 #include <stdlib.h>
 
-#include "HaikuPlot.h"
+#include "GnuplotViewer.h"
 
 class App : public BApplication
 {
@@ -16,9 +16,9 @@ class App : public BApplication
 };
 
 App::App(void)
-	: BApplication("application/x-vnd.haikuplot")
+	: BApplication("application/x-vnd.gnuplotviewer")
 {
-	HaikuPlot *mainWin = new HaikuPlot();
+	GnuplotViewer *mainWin = new GnuplotViewer();
 	mainWin->Show();
 }
 

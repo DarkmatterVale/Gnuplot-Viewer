@@ -5,8 +5,8 @@
 ## architecture of Haiku.
 
 # The name of the binary.
-NAME = HaikuPlot
-TARGET_DIR = HaikuPlot
+NAME = GnuplotViewer
+TARGET_DIR = GnuplotViewer
 
 # The type of binary, must be one of:
 #	APP:	Application
@@ -22,14 +22,14 @@ APP_MIME_SIG =
 #	so that Pe and Eddie can fill them in for you.
 #%{
 SRCS = \
-	 HaikuPlot/App.cpp  \
-	 HaikuPlot/HaikuPlot.cpp  \
+	 GnuplotViewer/App.cpp  \
+	 GnuplotViewer/GnuplotViewer.cpp  \
 
 
 #	Specify the resource definition files to use. Full or relative paths can be
 #	used.
 RDEFS = \
-	 HaikuPlot/HaikuPlot.rdef  \
+	 GnuplotViewer/GnuplotViewer.rdef  \
 
 
 #	Specify the resource files to use. Full or relative paths can be used.
@@ -39,6 +39,10 @@ RSRCS = \
 
 # End Pe/Eddie support.
 # @<-src@
+#%}
+
+#%}
+
 #%}
 
 #%}
