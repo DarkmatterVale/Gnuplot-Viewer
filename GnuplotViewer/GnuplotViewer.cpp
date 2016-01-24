@@ -31,14 +31,11 @@
 
 enum
 {
-	LOAD_PLOT = 'ldpt',
 	GENERATE_PLOT = 'gnpt',
 	MSG_SAVE_PANEL = 'mgsp',
 	MSG_OUTPUT_TYPE = 'BTMN',
 	SAVE_PLOT = 'svas',
-	SHOW_ABOUT = 'swat',
-	MSG_GENERATE_SCRIPT = 'mgpt',
-	MSG_SAVE_SCRIPT = 'mgss'
+	SHOW_ABOUT = 'swat'
 };
 
 const char* kTypeField = "be:type";
@@ -65,28 +62,14 @@ GnuplotViewer::_BuildLayout()
 
 	BMenuBar *fMenuBar = new BMenuBar(r, "menubar");
 	BMenu *fFileMenu = new BMenu("File");
-	BMenu *fMenuSaveAs = new BMenu("Export as", B_ITEMS_IN_COLUMN);
+	BMenu *fMenuSaveAs = new BMenu("Export plot as", B_ITEMS_IN_COLUMN);
 	BMenu *fSettingsMenu = new BMenu("Settings");
-	BMenu *fScriptMenu = new BMenu("Script");
 
-	fFileMenu->AddItem(new BMenuItem("Open Plot", new BMessage(LOAD_PLOT),
-		'L', B_COMMAND_KEY));
-	fFileMenu->AddItem(new BMenuItem("Open Script",
-		new BMessage(GENERATE_PLOT), 'G', B_COMMAND_KEY));
-	fFileMenu->AddSeparatorItem();
 	BTranslationUtils::AddTranslationItems(fMenuSaveAs,
 		B_TRANSLATOR_BITMAP);
 	fFileMenu->AddItem(fMenuSaveAs);
 
 	fMenuBar->AddItem(fFileMenu);
-
-	fScriptMenu->AddItem(new BMenuItem("Generate...",
-		new BMessage(MSG_GENERATE_SCRIPT), 'P', B_COMMAND_KEY));
-	fScriptMenu->AddSeparatorItem();
-	fScriptMenu->AddItem(new BMenuItem("Save...",
-		new BMessage(MSG_SAVE_SCRIPT), 'S', B_COMMAND_KEY));
-
-	fMenuBar->AddItem(fScriptMenu);
 
 	fSettingsMenu->AddItem(new BMenuItem("About", new BMessage(SHOW_ABOUT),
 		'A', B_COMMAND_KEY));
@@ -96,22 +79,9 @@ GnuplotViewer::_BuildLayout()
 	fPictureView = new BView(BRect(0,20,650,600), "picture_view",
 		B_FOLLOW_NONE, B_WILL_DRAW);
 
-	fScriptView = new BTextView("script_view", B_WILL_DRAW);
-
-	static const float spacing = be_control_look->DefaultItemSpacing() / 2;
-	fMainSplitView =
-		BLayoutBuilder::Split<>(B_HORIZONTAL)
-			.AddGroup(B_VERTICAL)
-				.Add(fPictureView)
-			.End()
-			.AddGroup(B_VERTICAL, spacing / 2)
-				.Add(fScriptView)
-			.End()
-		.View();
-
 	BLayoutBuilder::Group<>(this, B_VERTICAL, 0)
 		.Add(fMenuBar)
-		.Add(fMainSplitView);
+		.Add(fPictureView);
 }
 
 
@@ -138,13 +108,6 @@ GnuplotViewer::MessageReceived(BMessage *msg)
 
 	switch (msg->what)
 	{
-		case LOAD_PLOT:
-		{
-			fOpenPanel->Show();
-			loading_plot = true;
-
-			break;
-		}
 		case GENERATE_PLOT:
 		{
 			fOpenPanel->Show();
@@ -196,18 +159,6 @@ GnuplotViewer::MessageReceived(BMessage *msg)
 
 			break;
 		}
-		case MSG_GENERATE_SCRIPT:
-		{
-			SaveScript();
-
-			break;
-		}
-		case MSG_SAVE_SCRIPT:
-		{
-			SaveScript();
-
-			break;
-		}
 		default:
 		{
 			BWindow::MessageReceived(msg);
@@ -241,18 +192,6 @@ GnuplotViewer::HandleNodeMonitoring(BMessage *msg)
 
 
 void
-GnuplotViewer::SaveScript(void)
-{
-	BFile file(&fRef, B_READ_WRITE | B_CREATE_FILE);
-
-	if (file.InitCheck() != B_OK)
-		return;
-
-	BTranslationUtils::WriteStyledEditFile(fScriptView, &file, "");
-}
-
-
-void
 GnuplotViewer::GeneratePlot(const entry_ref &ref)
 {
 	PrepareNodeMonitoring(ref);
@@ -264,12 +203,6 @@ GnuplotViewer::GeneratePlot(const entry_ref &ref)
 	BFile file(&real_ref, B_READ_ONLY);
 	if (file.InitCheck() != B_OK)
 		return;
-
-	fScriptView->SetText("");
-	if (BTranslationUtils::GetStyledText(&file, fScriptView) != B_OK)
-	{
-		return;
-	}
 
 	BPath path(&real_ref);
 

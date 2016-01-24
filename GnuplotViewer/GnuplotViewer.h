@@ -13,13 +13,11 @@
 #include <FilePanel.h>
 #include <Entry.h>
 #include <Directory.h>
-#include <TextControl.h>
 #include <Bitmap.h>
 #include <Node.h>
 #include <TranslationUtils.h>
 #include <TranslationDefs.h>
 #include <TranslatorRoster.h>
-#include <SplitView.h>
 
 class GnuplotViewer : public BWindow
 {
@@ -44,15 +42,10 @@ class GnuplotViewer : public BWindow
 		void SaveToFile(BDirectory* dir, const char* name, BBitmap* bitmap,
 			const translation_format* format);
 
-		void SaveScript(void);
-
 		BFilePanel *fOpenPanel;
 		BFilePanel *fSavePanel;
 		BBitmap *fPictureBitmap;
 		BView *fPictureView;
-		BTextView *fScriptView;
-
-		BSplitView *fMainSplitView;
 
 		bool loading_plot;
 
